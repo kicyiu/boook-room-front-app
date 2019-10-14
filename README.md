@@ -1,3 +1,5 @@
+Aplicación web que consume una api para realizar reservas de horas de salas de reuniones, desarrollado en Angular 8.
+
 # Version
 
 Este proyecto fue generado con  Angular CLI version 8.1.3
