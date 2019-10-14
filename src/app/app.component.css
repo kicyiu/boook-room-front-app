@@ -1,0 +1,11 @@
+.app-calendar {
+    padding-top: 15px;
+    margin: 0 auto;
+    max-width: 900px;
+    font-family: Arial, Helvetica Neue, Helvetica, sans-serif;
+    font-size: 14px;
+}
+
+.modal.show {
+    display: block;
+}
