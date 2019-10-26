@@ -1,4 +1,4 @@
-import { Injectable, EventEmitter } from '@angular/core';
+import { Injectable, EventEmitter, Output } from '@angular/core';
 import { Subject, Observable } from 'rxjs';
 import { loggerProvider } from '../providers/logger/logger.provider';
 import { BaseServices } from '../providers/base-services/base.service.provider';
@@ -16,6 +16,8 @@ export class MeetingService {
 
   public meetingDataSubject = new Subject<void>();
   public meetingData$ = this.meetingDataSubject.asObservable();
+
+  successData$ = new EventEmitter<any>();
 
   constructor(
     private http: HttpClient,

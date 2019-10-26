@@ -15,26 +15,31 @@ import { FullCalendarModule } from '@fullcalendar/angular';
 
 import { AppComponent } from './app.component';
 import { EventModalComponent } from './components/event-modal/event-modal.component';
+import { ModalModule } from 'ngx-bootstrap/modal';
+import { NgxModalComponent } from './components/ngx-modal/ngx-modal.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    EventModalComponent
+    EventModalComponent,
+    NgxModalComponent
   ],
   imports: [
     BrowserModule,
     FullCalendarModule,
     FormsModule,
     ReactiveFormsModule,
-    HttpClientModule
+    HttpClientModule,
+    ModalModule.forRoot()
   ],
   providers: [
     DatePipe,
     AppConstants,
     BaseServices,
     loggerProvider,
-    GeneralServiceResponseProvider
+    GeneralServiceResponseProvider,
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  entryComponents: [NgxModalComponent],
 })
 export class AppModule { }

@@ -1,0 +1,115 @@
+<!-- The Modal -->
+<div id="myModal">
+    <!-- Modal Header -->
+    <div class="modal-header">
+        <h4 class="modal-title">{{updateEvent ? 'Datos del Evento' : 'Agendar Hora' }}</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+
+    <!-- Modal body -->
+    <form (ngSubmit)="onSubmit()">
+        <div class="modal-body">
+            <div class="form-group row">
+                <div class="col-sm-3 col-form-label">
+                    <label class="control-label">Fecha</label>
+                </div>
+                <div class="col-6">
+                    <input class="form-control" [formControl]="parentForm.controls['meetingDate']" name="meetingDate"
+                        disabled required>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-sm-3 col-form-label">
+                    <label class="control-label">Título</label>
+                </div>
+                <div class="col-6">
+                    <input class="form-control" [formControl]="parentForm.controls['title']" name="title" required>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-sm-3 col-form-label">
+                    <label class="control-label">Hora Inicio</label>
+                </div>
+                <div class="col-3">
+                    <input type="number" max="24" min="1" class="form-control"
+                        [formControl]="parentForm.controls['startHour']" name="startHour" required>
+                </div>
+                :
+                <div class="col-3">
+                    <input type="number" max="59" min="0" class="form-control"
+                        [formControl]="parentForm.controls['startMinute']" name="startMinute" required>
+                </div>
+            </div>
+            <div [hidden]="parentForm.controls['startHour'].valid || parentForm.controls['startHour'].pristine"
+                class="alert alert-danger">
+                Solo puede hacer resevas desde las 09 hasta las 21
+            </div>
+            <div [hidden]="parentForm.controls['startMinute'].valid || parentForm.controls['startMinute'].pristine"
+                class="alert alert-danger">
+                Minuto invalido
+            </div>
+            <div class="form-group row">
+                <div class="col-sm-3 col-form-label">
+                    <label class="control-label">Hora Fin</label>
+                </div>
+                <div class="col-3">
+                    <input type="number" max="24" min="1" class="form-control"
+                        [formControl]="parentForm.controls['endHour']" name="endHour" required>
+                </div>
+                :
+                <div class="col-3">
+                    <input type="number" max="59" min="0" class="form-control"
+                        [formControl]="parentForm.controls['endMinute']" name="endMinute" required>
+                </div>
+            </div>
+            <div [hidden]="parentForm.controls['endHour'].valid || parentForm.controls['endHour'].pristine"
+                class="alert alert-danger">
+                Solo puede hacer resevas desde las 09 hasta las 21
+            </div>
+            <div [hidden]="parentForm.controls['endMinute'].valid || parentForm.controls['endMinute'].pristine"
+                class="alert alert-danger">
+                Minuto invalido
+            </div>
+
+            <div class="form-group row">
+                <div class="col-sm-3 col-for m-label">
+                    <label class="control-label">Descripción</label>
+                </div>
+                <div class="col-6">
+                    <textarea class="form-control" [formControl]="parentForm.controls['description']"
+                        name="description"></textarea>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Modal footer -->
+        <div class="modal-footer form-footer">
+            <!-- <button type="submit" class="btn btn-success" data-dismiss="modal" [disabled]="!parentForm.valid">Agendar</button> -->
+            <button *ngIf="!successMsg" type="submit" class="btn btn-success"
+                [disabled]="!parentForm.valid">{{updateEvent ? 'Actualizar' : 'Agendar' }}</button>
+            <button *ngIf="updateEvent && !successMsg" type="button" class="btn btn-danger"
+                (click)="removeEvent()">Eliminar hora</button>
+
+            <div *ngIf="successMsg" [ngClass]="sucessMsgClass" role="alert">
+                {{successMsg}}
+            </div>
+        </div>
+    </form>
+</div>
+
+    <!-- <div class="modal-header">
+        <h4 class="modal-title pull-left">Modal</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        This is a modal.
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" (click)="modalRef.hide()">Close</button>
+    </div> -->
+

@@ -1,14 +1,16 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, TemplateRef } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { EventInput } from '@fullcalendar/core';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGrigPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import listPlugin from '@fullcalendar/list';
+import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 
 
 
 import { MeetingService } from './services/meeting.service';
+import { NgxModalComponent } from './components/ngx-modal/ngx-modal.component';
 
 @Component({
   selector: 'app-root',
@@ -28,10 +30,13 @@ export class AppComponent implements OnInit {
     { title: 'Event Now', start: new Date() }
   ]; */
 
+  modalRef: BsModalRef;
+
   constructor(
+    // tslint:disable-next-line: variable-name
     private _meetingService: MeetingService,
     private datePipe: DatePipe,
-
+    private modalService: BsModalService
   ) {
 
     this.meetingData = {};
@@ -40,6 +45,10 @@ export class AppComponent implements OnInit {
 
   ngOnInit() {
     this.getCalendarEvents();
+
+    this._meetingService.successData$.subscribe((data) => {
+      this.processSuccessData(data);
+    });
   }
 
   getCalendarEvents() {
@@ -64,8 +73,9 @@ export class AppComponent implements OnInit {
     });
   }
 
-  handleDateClick(arg) {
+  handleDateClick(arg, template: TemplateRef<any>) {
     console.log('handleDateClick: ', arg);
+    this.openNgxModal(false);
     if ((arg.date.getDay() !== 0) && (arg.date.getDay() !== 6)) {
       this.meetingData = {
         meetingDate: this.datePipe.transform(arg.date, 'yyyy-MM-dd'),
@@ -77,7 +87,7 @@ export class AppComponent implements OnInit {
 
       this._meetingService.meetingDataSubject.next(this.meetingData);
 
-      this.openEventModal();
+      //this.openEventModal();
     }
   }
 
@@ -86,17 +96,25 @@ export class AppComponent implements OnInit {
     el.click();
   }
 
+  openNgxModal(updateEvent: boolean) {
+    const initialState = {
+      updateEvent
+    };
+    this.modalRef = this.modalService.show(NgxModalComponent, {initialState});
+  }
+
   handleEventClick(arg) {
     console.log('handleEventClick ', arg);
+    this.openNgxModal(true);
     this.meetingData = {
       id: parseInt(arg.event._def.publicId, 10),
       title: arg.event._def.title,
       meetingDate: this.datePipe.transform(arg.event._instance.range.start, 'yyyy-MM-dd'),
       // tslint:disable-next-line: max-line-length
-      startHour: parseInt(this.datePipe.transform(arg.event._instance.range.start, 'H'), 10) + arg.event._instance.range.start.getTimezoneOffset()/60,
+      startHour: parseInt(this.datePipe.transform(arg.event._instance.range.start, 'H'), 10) + arg.event._instance.range.start.getTimezoneOffset() / 60,
       startMinute: this.datePipe.transform(arg.event._instance.range.start, 'm'),
       // tslint:disable-next-line: max-line-length
-      endHour: parseInt(this.datePipe.transform(arg.event._instance.range.end, 'H'), 10) + arg.event._instance.range.end.getTimezoneOffset()/60,
+      endHour: parseInt(this.datePipe.transform(arg.event._instance.range.end, 'H'), 10) + arg.event._instance.range.end.getTimezoneOffset() / 60,
       endMinute: this.datePipe.transform(arg.event._instance.range.end, 'm'),
       description: arg.event._def.extendedProps ? arg.event._def.extendedProps.description : '',
       updateEvent: true
@@ -104,7 +122,7 @@ export class AppComponent implements OnInit {
 
     this._meetingService.meetingDataSubject.next(this.meetingData);
 
-    this.openEventModal();
+    //this.openEventModal();
   }
 
   processSuccessData(event) {
@@ -119,6 +137,7 @@ export class AppComponent implements OnInit {
           description: event.description
         };
         this.calendarEvents = this.calendarEvents.concat(eventObj);
+        break;
       }
       case 'update': {
         let auxEventList: any = JSON.stringify(this.calendarEvents);
@@ -134,6 +153,7 @@ export class AppComponent implements OnInit {
           eventList.push(e);
         });
         this.calendarEvents = eventList;
+        break;
       }
       case 'remove': {
         let auxEventList: any = JSON.stringify(this.calendarEvents);
@@ -145,8 +165,9 @@ export class AppComponent implements OnInit {
           }
         });
 
-        console.log("eventList: ", eventList);
+        console.log('eventList: ', eventList);
         this.calendarEvents = eventList;
+        break;
       }
     }
   }
