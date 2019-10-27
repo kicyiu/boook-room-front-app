@@ -17,12 +17,14 @@ import { AppComponent } from './app.component';
 import { EventModalComponent } from './components/event-modal/event-modal.component';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { NgxModalComponent } from './components/ngx-modal/ngx-modal.component';
+import { LoadingComponent } from './components/loading/loading.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     EventModalComponent,
-    NgxModalComponent
+    NgxModalComponent,
+    LoadingComponent
   ],
   imports: [
     BrowserModule,

@@ -24,6 +24,7 @@ export class AppComponent implements OnInit {
 
   calendarPlugins = [dayGridPlugin, timeGrigPlugin, interactionPlugin, listPlugin]; // important!
   meetingData: any;
+  loading: boolean;
 
   calendarEvents: EventInput[] = [];
   /* calendarEvents: EventInput[] = [
@@ -52,8 +53,10 @@ export class AppComponent implements OnInit {
   }
 
   getCalendarEvents() {
+    this.loading = true;
     this._meetingService.getMeetings().subscribe((res) => {
       console.log('getCalendarEvents: ', res);
+      this.loading = false;
       if (res.statusCode === 200) {
         res.data.forEach(event => {
           const eventObj = {
@@ -69,7 +72,7 @@ export class AppComponent implements OnInit {
 
       console.log('calendarEvents: ', this.calendarEvents);
     }, (err) => {
-
+      this.loading = false;
     });
   }
 

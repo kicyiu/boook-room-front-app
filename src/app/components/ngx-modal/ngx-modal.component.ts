@@ -16,6 +16,7 @@ export class NgxModalComponent implements OnInit {
 
   public successMsg: string;
   public sucessMsgClass: any;
+  loading: boolean;
 
   private meetingDataSubs: Subscription = null;
   public meetingData: any;
@@ -86,12 +87,14 @@ export class NgxModalComponent implements OnInit {
   removeEvent() {
     console.log('removeEvent');
     const data = { id: this.meetingData.id };
+    this.loading = true;
     this._meetingService.removeMeeting(data).subscribe( (resp) => {
       /* this.successMsg = "Mensajes actualizados exitosamente";
       this.sucessMsgClass = ['alert', 'alert-success', 'animated', 'fadeIn', 'hidden'];
       setTimeout(() =>  {
         this.dismmissMessage();
       }, 5000) */
+      this.loading = false;
       console.log('Reserva eliminada exitosamente');
       if (resp.statusCode === 200) {
         this.showSuccessMessage(resp.message);
@@ -105,11 +108,13 @@ export class NgxModalComponent implements OnInit {
       setTimeout(() =>  {
         this.dismmissMessage();
       }, 5000) */
+      this.loading = false;
       console.error('Error al eliminar reserva: ', err);
     });
   }
 
   createNewEvent(formData: any) {
+    this.loading = true;
     this._meetingService.creatingMeeting(formData).subscribe( (resp) => {
       /* this.successMsg = "Mensajes actualizados exitosamente";
       this.sucessMsgClass = ['alert', 'alert-success', 'animated', 'fadeIn', 'hidden'];
@@ -118,6 +123,7 @@ export class NgxModalComponent implements OnInit {
       }, 5000) */
 
       console.log('Reserva creado exitosamente');
+      this.loading = false;
       if (resp.statusCode === 200) {
         this.showSuccessMessage(resp.message);
 
@@ -125,6 +131,7 @@ export class NgxModalComponent implements OnInit {
         this._meetingService.successData$.emit(resp.data);
       }
     }, (err) => {
+      this.loading = false;
       /* this.errorMsg = "Hubo un error al actualizar los mensajes" + JSON.stringify(err);
       this.errorMsgClass = ['alert', 'alert-danger', 'animated', 'fadeIn', 'hidden'];
 
@@ -136,6 +143,7 @@ export class NgxModalComponent implements OnInit {
   }
 
   updateExistingEvent(formData: any) {
+    this.loading = true;
     this._meetingService.updateMeeting(formData).subscribe( (resp) => {
       /* this.successMsg = "Mensajes actualizados exitosamente";
       this.sucessMsgClass = ['alert', 'alert-success', 'animated', 'fadeIn', 'hidden'];
@@ -144,6 +152,7 @@ export class NgxModalComponent implements OnInit {
       }, 5000) */
 
       console.log('Reserva actualizado exitosamente');
+      this.loading = false;
       if (resp.statusCode === 200) {
         this.showSuccessMessage(resp.message);
         formData.action = 'update';
@@ -156,6 +165,7 @@ export class NgxModalComponent implements OnInit {
       setTimeout(() =>  {
         this.dismmissMessage();
       }, 5000) */
+      this.loading = false;
       console.error('Error al actualizar reserva: ', err);
     });
   }
