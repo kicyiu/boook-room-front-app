@@ -1,4 +1,5 @@
 .app-calendar {
+    position: relative;
     padding-top: 15px;
     margin: 0 auto;
     max-width: 900px;

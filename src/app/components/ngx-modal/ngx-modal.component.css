@@ -1,3 +1,7 @@
+.ngx-modal-div {
+    position: relative;
+}
+
 .form-footer {
     display: block;
     text-align: center;
