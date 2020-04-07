@@ -204,5 +204,11 @@ export class NgxModalComponent implements OnInit {
     }
   }
 
+  ngOnDestroy() {
+    if (this.meetingDataSubs) {
+      this.meetingDataSubs.unsubscribe();
+    } 
+  }
+
 
 }
